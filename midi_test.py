@@ -1,6 +1,7 @@
 from midiutil import MIDIFile
 import pygame
 import sys
+from sound_mappings import amino_acids
 from Bio.Seq import Seq
 
 
@@ -39,7 +40,7 @@ for base in seq:
         pitch = base_map[base]
         midi_file.addNote(track, channel, pitch, time, duration, volume)
         time += duration
-        
+
 time = 0
 for base in seq2:
     base = base.upper()

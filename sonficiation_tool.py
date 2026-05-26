@@ -1,3 +1,7 @@
+import os
+# Hide the pygame CLI start-up prompt
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+from datetime import datetime
 from midiutil import MIDIFile
 import pygame
 import sys
@@ -34,7 +38,7 @@ base_map = {"A": 69, "T": 64, "G": 67, "C": 60}
 midi_file = MIDIFile(2, adjust_origin=False)
 
 time = 0
-tempo = 120
+tempo = 140
 
 
 def build_track_nuc(sequence: str, track: int, midi=midi_file, b_map=base_map):
@@ -60,6 +64,7 @@ def build_track_nuc(sequence: str, track: int, midi=midi_file, b_map=base_map):
 
 
 def build_track_codon(sequence: str, track: int, midi=midi_file, c_map=codons, window_size=3):
+    """This option keeps the codon sequence in sync with its respective nucleotide sequence, but causes a desycning of codon seqs after a gap - represents the frameshift better??"""
     channel = 1
     time = 0
     duration = window_size
@@ -78,8 +83,8 @@ def build_track_codon(sequence: str, track: int, midi=midi_file, c_map=codons, w
             if len(codon) == 3:
                 codon_seq = ''.join(codon)  # Concat list to get string of codon
                 if c_map[codon_seq]['name'] == "Stop":
-                    # channel = 9
-                    pitch = 81
+                    channel = 9
+                    pitch = 39
                 else:
                     channel = 1
                     pitch = c_map[codon_seq]['midi']
@@ -89,24 +94,55 @@ def build_track_codon(sequence: str, track: int, midi=midi_file, c_map=codons, w
 
         time += 1
 
+def build_track_codon2(sequence: str, track: int, midi=midi_file, c_map=codons, start_index=0, window_size=3):
+    """This option keeps the codon sequences in sync with each other but causes a mismatch between the codons and the nucleotides when a gap occurs"""
+    time = 0
+    duration = window_size
+    volume = 100
+    program = 11  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
+    sequence = sequence.replace('-', '')
+    for i in range(len(sequence)//window_size):
+        codon = sequence[start_index:(start_index+window_size)]
+        try:
+            if c_map[codon]['name'] == "Stop":
+                channel = 9
+                pitch = 35
+            else:
+                channel = 1
+                pitch = c_map[codon]['midi']
+        except KeyError as e:
+            exit(f"Invalid codon found in sequence > {e}")
+
+        midi.addNote(track, channel, pitch, time, duration, volume)
+        start_index += window_size
+        time += duration
+
 # Build both tracks - 1 for query seq and 1 for subject seq
 track = 0
 for seq in [query_seq, subject_seq]:
     midi_file.addTrackName(track, time, f"track_{track}")
     midi_file.addTempo(track, time, tempo)
-    # build_track_nuc(seq, track)
-    build_track_codon2(seq, track)
+    build_track_nuc(seq, track)
+    build_track_codon(seq, track)
     print(f"track_{track}", seq)
     track += 1
 
+# Assign our output file a unique name - if multiple people running this avoids overwriting each others work
+dt = datetime.now()
+out_path = "temp"
+output_file = f"output_file_{dt.strftime('%Y-%m-%d_%H-%M-%S_%f')}"
+out_path_and_file = f"{out_path}/{output_file}.mid"
 
-
-with open("temp/output_file.mid", "wb") as outfile:
+with open(out_path_and_file, "wb") as outfile:
     midi_file.writeFile(outfile)
 
 pygame.mixer.init()
-pygame.mixer.music.load("temp/output_file.mid")
+pygame.mixer.music.load(out_path_and_file)
 pygame.mixer.music.play()
 
 while pygame.mixer.music.get_busy():
     pygame.time.delay(100)
+
+# Clean up temp file 
+if os.path.exists(out_path_and_file):
+    os.remove(out_path_and_file)

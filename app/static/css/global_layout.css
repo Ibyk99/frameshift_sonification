@@ -1,0 +1,165 @@
+/* creation guided by https://www.w3schools.com/css/tryit.asp?filename=trycss_grid_layout_named */
+
+/* Set up the font and general page layout  - 1 header, 1 footer, 1 sidebar, main content area */
+body {
+  /* Fall back to use consolas if jetbrains isn't available */
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    display: grid;
+    grid-template-areas:
+        "header  header header"
+        "content content content"
+        "footer  footer footer";
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+
+}
+
+/* Define how the header looks & set the font size  */
+header {
+    grid-area: header;
+    background-color: #7c5cbf;
+    color: #f3f0f7;
+    padding: 16px 24px;
+}
+
+/* Define how the sidebar looks, border-right adds a line to seaprate it from the rest of the page */
+sidebar {
+    grid-area: sidebar;
+    background-color: #e8e0f0;
+    padding: 24px 16px;
+    border-right: 1px solid #c9b8e8;
+    position: relative;
+
+}
+sidebar li {
+    margin-bottom: 12px;
+}
+/*  Text decoration removes the underlining when a link is added */
+sidebar a {
+    text-decoration: none;
+    color: #503786;
+}
+
+/* Hover over text to change colour adapted from here - https://www.w3schools.com/cssref/sel_hover.php  */
+sidebar a:hover {
+    color: #7c5cbf;
+}
+
+/* Define how the main part of the page will look */
+content {
+    grid-area: content;
+    background-color: #f3f0f7;
+    padding: 32px;
+}
+
+/* Define how the footer part of the page will look */
+footer {
+    grid-area: footer;
+    background-color: #7c5cbf;
+    color: #d8cef0;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.85rem;
+}
+
+/* This bit just makes sure that any input boxes and submit buttons use the same font as everything else */
+input, button {
+    font-family: inherit;
+    padding: 5px;
+}
+
+/*  Solution to getting button to change colour https://stackoverflow.com/questions/52225675/submit-button-not-changing-colour-on-hover */
+.submit:hover {
+    background: #5a3d99;
+}
+.submit {
+  width: 100px;
+  height: 25 px;
+  background-color: #9b7fd4;
+  border-radius: 10%;
+  color: #f3f0f7;
+  border: none;
+}
+
+/* Table highlighting taken from https://www.w3schools.com/html/tryit.asp?filename=tryhtml_table_hover */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+    background-color: #9b7fd4;
+    text-align: center;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #DDD;
+}
+tr:hover {background-color: #c5b7e0;}
+
+
+/*  Tab stlying for results page, adapted from https://www.w3schools.com/howto/howto_js_tabs.asp */
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* Alignment card styling with hover effect */
+.alignment-card {
+  border: 2px solid #c9b8e8;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background-color: white;
+}
+
+/* Hover effect for alignment cards - lift and add shadow */
+.alignment-card:hover {
+  border-color: #7c5cbf;
+  box-shadow: 0 4px 8px rgba(124, 92, 191, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Highlight gaps (dashes) in sequence alignments */
+.gap {
+  background-color: #ffd700;
+  font-weight: bold;
+}

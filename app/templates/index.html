@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frameshift Sonification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Frameshift Sonification</h1>
+    <form method="POST">
+        <input type="text" name="text" placeholder="Enter text here" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <strong>Result:</strong><br>
+        {{ result }}
+    </div>
+    {% endif %}
+</body>
+</html>

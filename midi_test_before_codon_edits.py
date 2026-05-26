@@ -24,8 +24,8 @@ query_seq = alignment.query
 subject_seq = alignment.sbjct
 
 
-# Map of Bases - Midi notes (C major scale, mnemonic note names)
-base_map = {"A": 69, "T": 64, "G": 67, "C": 60}
+# Map of Bases - Midi notes
+base_map = {"A": 9, "T": 5, "G": 7, "C": 12}
 
 # Init a midi file which we can have multiple channels in
 midi_file = MIDIFile(2, adjust_origin=False)
@@ -35,14 +35,13 @@ tempo = 120
 
 
 def build_track_nuc(sequence: str, track: int, midi=midi_file, b_map=base_map):
-    time = 0
     channel = 0
+    time = 0
     duration = 1
+    volume = 100
     program =  11  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
     midi.addProgramChange(track, channel, time, program)
     for base in sequence:
-        volume = 100
-        channel = 0
         base = base.upper()
         if base not in b_map and base != '-':
             exit(f"Error: Looks like there's a non-nucleotide character in your sequence: {base}")
@@ -56,45 +55,33 @@ def build_track_nuc(sequence: str, track: int, midi=midi_file, b_map=base_map):
         time += duration
 
 
-def build_track_codon(sequence: str, track: int, midi=midi_file, c_map=codons, window_size=3):
-    channel = 1
+def build_track_codon(sequence: str, track: int, midi=midi_file, c_map=codons, start_index=0, window_size=3):
     time = 0
-    duration = window_size
+    duration = 1
     volume = 100
-    program =  1  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
-    midi.addProgramChange(track, channel, time, program)
-    codon = [] # Using a list here rather than a string as strings are immutable - very small performance advantage
-    for base in sequence:
-        base = base.upper()
-        # Build up our codon from the bases we're looking at if the base isn't a gap
-        if base != '-':  
-            if len(codon) == 0:
-                codon_time = time
-            codon.append(base)
-
-            if len(codon) == 3:
-                codon_seq = ''.join(codon)  # Concat list to get string of codon
-                if c_map[codon_seq]['name'] == "Stop":
-                    channel = 9
-                    pitch = 35
-                else:
-                    channel = 1
-                    pitch = c_map[codon_seq]['midi']
-
-                midi.addNote(track, channel, pitch, codon_time, duration, volume)
-                codon = []
-
-        time += 1
+    program =  11  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
+    sequence = sequence.replace('-', '')
+    for i in range(int(len(sequence)/window_size)):
+        channel = 1
+        codon = sequence[start_index:(start_index+window_size)]
+        if c_map[codon]['name'] == "Stop":
+            channel = 9
+            pitch = 35
+        else:
+            pitch = c_map[codon]['midi']
+        midi.addNote(track, channel, pitch, time, duration, volume)
+        start_index += window_size
+        time += duration
 
 # Build both tracks - 1 for query seq and 1 for subject seq
 track = 0
 for seq in [query_seq, subject_seq]:
     midi_file.addTrackName(track, time, f"track_{track}")
     midi_file.addTempo(track, time, tempo)
-    build_track_nuc(seq, track)
+    # build_track_nuc(seq, track)
     build_track_codon(seq, track)
-    print(f"track_{track}", seq)
     track += 1
+    print(f"track_{track}", seq)
 
 
 

@@ -24,7 +24,7 @@ amino_acids = {
     'R': 77,
 }
 
-# Codon to amino acid/MIDI mapping (standard genetic code)
+# Codon to amino acid mapping, built out from the above
 codons = {
     'TTT': {'name': 'Phenylalanine', 'symbol': 'F', 'midi': 50},
     'TTC': {'name': 'Phenylalanine', 'symbol': 'F', 'midi': 50},

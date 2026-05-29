@@ -94,29 +94,6 @@ def build_track_codon(sequence: str, track: int, midi=midi_file, c_map=codons, w
 
         time += 1
 
-def build_track_codon2(sequence: str, track: int, midi=midi_file, c_map=codons, start_index=0, window_size=3):
-    """This option keeps the codon sequences in sync with each other but causes a mismatch between the codons and the nucleotides when a gap occurs"""
-    time = 0
-    duration = window_size
-    volume = 100
-    program = 11  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
-    sequence = sequence.replace('-', '')
-    for i in range(len(sequence)//window_size):
-        codon = sequence[start_index:(start_index+window_size)]
-        try:
-            if c_map[codon]['name'] == "Stop":
-                channel = 9
-                pitch = 35
-            else:
-                channel = 1
-                pitch = c_map[codon]['midi']
-        except KeyError as e:
-            exit(f"Invalid codon found in sequence > {e}")
-
-        midi.addNote(track, channel, pitch, time, duration, volume)
-        start_index += window_size
-        time += duration
-
 # Build both tracks - 1 for query seq and 1 for subject seq
 track = 0
 for seq in [query_seq, subject_seq]:

@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>Alignment Results - Frameshift Sonification</title>
+    <link rel="stylesheet" href="../static/css/global_layout.css" type="text/css">
+</head>
+<body>
+    <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
+    <content>
+        <p><a href="/" style="color: #503786;">← Back to alignments</a></p>
+
+        <div class="alignment-card">
+            <h3>Alignment Details</h3>
+            <p><b>E-value:</b> {{ alignment.evalue }} | <b>Score:</b> {{ alignment.bits }} bits</p>
+
+            <pre>Query:    {{ alignment.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+            <pre>          {{ alignment.match }}</pre>
+            <pre>Subject:  {{ alignment.subject|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+        </div>
+
+        <form method="POST" action="/alignment/sonify">
+            <input type="hidden" name="query_seq" value="{{ alignment.query }}">
+            <input type="hidden" name="subject_seq" value="{{ alignment.subject }}">
+            <button type="submit">Generate Sonification</button>
+        </form>
+
+
+    </content>
+</body>
+</html>

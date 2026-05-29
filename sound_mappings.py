@@ -1,4 +1,4 @@
-bases = {"A": 440, "T": 523, "G": 349, "C": 659, "N": 245}
+base_map = {"A": 69, "T": 64, "G": 67, "C": 60}
 
 # Mappings from Edward et al 2021 (Table 1) - PMID: 34556048
 amino_acids = {

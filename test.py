@@ -1,5 +1,5 @@
 import numpy as np
-import sound_mappings
+import sound_mappings as sound_mappings
 import sys
 
 import os

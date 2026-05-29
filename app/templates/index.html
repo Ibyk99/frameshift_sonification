@@ -8,26 +8,32 @@
     <content>
         <p>This is tool to sonify pairwise alignments </p>
 
-        <form method="POST" enctype="multipart/form-data">
+        <!-- Upload file guidance- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file -->
+        <form method="POST" enctype="multipart/form-data"> <!-- this enctype is needed to upload a file  - https://www.w3schools.com/tags/att_form_enctype.asp -->
             <p>Choose an XML file to upload:</p>
             <input type="file" id="xml_file" name="xml_file" accept=".xml" required />
             <button type="submit">Upload</button>
         </form>
 
         {% if error %}
-            <p style="color: red;">{{ error }}</p>
+            <div style='border: 3px solid red; border-radius: 8px; padding: 10px; margin-top: 5px'>  <!-- margin-top used here to create a separation from the summary div for more appealing look-->
+            <p><b>Error: </b>{{ error }}</p>
+            </div>
         {% endif %}
 
         {% if result %}
             <h3>Successfully Read XML file - {{ result|length }} alignments found</h3>
             {% for res in result %}
-                <div class="alignment-card">
-                    <h4>Alignment {{ loop.index }}:</h4>
-                    <p><b>E-value:</b> {{ res.evalue }} | <b>Score:</b> {{ res.bits }} bits</p>
-                    <pre><b>Query:</b>   {{ res.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
-                    <pre><b>Match:</b>   {{ res.match }}</pre>
-                    <pre><b>Subject:</b> {{ res.subject|replace('-', '<span class="gap">-</span>')|safe }}</pre>
-                </div>
+                <a href="/alignment/{{ loop.index0 }}" style="text-decoration: none;">
+                    <div class="alignment-card" style="cursor: pointer;">
+                        <h4>Alignment {{ loop.index }}:</h4>
+                        <p><b>E-value:</b> {{ res.evalue }} | <b>Score:</b> {{ res.bits }} bits</p>
+                        <!-- Below highlights any gaps in the query or subject sequences -->
+                        <pre><b>Query:</b>   {{ res.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+                        <pre><b>Match:</b>   {{ res.match }}</pre>
+                        <pre><b>Subject:</b> {{ res.subject|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+                    </div>
+                </a>
             {% endfor %}
         {% endif %}
     </content>

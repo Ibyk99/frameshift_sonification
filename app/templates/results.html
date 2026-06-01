@@ -4,13 +4,26 @@
     <link rel="stylesheet" href="../static/css/global_layout.css" type="text/css">
 </head>
 <body>
-    <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
+    {% if midi_file %}
+        <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/alignment/cleanup/{{ midi_file }}" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
+    {% else %}
+        <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
+    {% endif %}
     <content>
-        <p><a href="/" style="color: #503786;">← Back to alignments</a></p>
+        {% if midi_file %}
+            <p><a href="/alignment/cleanup/{{ midi_file }}" style="color: #503786;">← Back to alignments</a></p>
+        {% else %}
+            <p><a href="/" style="color: #503786;">← Back to alignments</a></p>
+        {% endif %}
 
         <div class="alignment-card">
             <h3>Alignment Details</h3>
-            <p><b>E-value:</b> {{ alignment.evalue }} | <b>Score:</b> {{ alignment.bits }} bits</p>
+            <p><b>Hit Definition-:</b> {{ alignment.hit_def }}</p>
+            <p><b>E-value:</b> {{ alignment.evalue }}</p>
+            <p><b>Score:</b> {{ alignment.bits }} bits</p>
+            <p><b>Accession:</b> {{ alignment.accession }}</p>
+            <p><b>Query Reading frame:</b> {{ alignment.query_frame }} </p>
+            <p><b>Subject Reading frame:</b> {{ alignment.subject_frame }} </p>
 
             <pre>Query:    {{ alignment.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
             <pre>          {{ alignment.match }}</pre>
@@ -20,8 +33,19 @@
         <form method="POST" action="/alignment/sonify">
             <input type="hidden" name="query_seq" value="{{ alignment.query }}">
             <input type="hidden" name="subject_seq" value="{{ alignment.subject }}">
+            <input type="hidden" name="index" value="{{ index }}">
             <button type="submit">Generate Sonification</button>
         </form>
+
+        {% if midi_file %}
+        <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/html-midi-player@1.5.0"></script>
+        <midi-player
+        src="/temp/{{ midi_file }}"
+        sound-font visualizer="#myVisualizer">
+        </midi-player>
+        <midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer>
+
+        {% endif %}
 
 
     </content>

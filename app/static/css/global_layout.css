@@ -149,6 +149,7 @@ tr:hover {background-color: #c5b7e0;}
   transition: all 0.3s ease;
   cursor: pointer;
   background-color: white;
+  overflow-x: auto;
 }
 
 /* Hover effect for alignment cards - lift and add shadow */

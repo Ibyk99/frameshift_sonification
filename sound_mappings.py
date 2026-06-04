@@ -1,4 +1,5 @@
-base_map = {"A": 69, "T": 64, "G": 67, "C": 60}
+# A,C,G map to their musical note (plaisier et al 2021), T has been assigned a note that evens the spread
+base_map = {"A": 69, "T": 63, "G": 67, "C": 60}
 
 # Mappings from Edward et al 2021 (Table 1) - PMID: 34556048
 amino_acids = {

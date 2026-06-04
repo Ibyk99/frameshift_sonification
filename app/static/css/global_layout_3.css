@@ -1,0 +1,689 @@
+/* ===== GLOBAL LAYOUT 3 - SLEEK & MODERN =====
+   Contemporary design with refined aesthetics */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+    margin: 0;
+    display: grid;
+    grid-template-areas: "header  header header" "content content content" "footer  footer footer";
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: #1e293b;
+}
+
+/* ===== HEADER =====
+   Modern top navigation with glass effect */
+
+header {
+    grid-area: header;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f1f5f9;
+    padding: 20px 32px;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+header a {
+    text-decoration: none;
+    color: #f1f5f9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+}
+
+header a:hover {
+    color: #e0f2fe;
+    transform: translateY(-1px);
+}
+
+/* ===== SIDEBAR =====
+   Left navigation panel */
+
+sidebar {
+    grid-area: sidebar;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    padding: 24px 16px;
+    border-right: 1px solid #e2e8f0;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+}
+
+sidebar li {
+    margin-bottom: 12px;
+    list-style: none;
+}
+
+sidebar a {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 500;
+    display: block;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 3px solid transparent;
+}
+
+sidebar a:hover {
+    color: #0f172a;
+    background-color: #e0f2fe;
+    border-left-color: #0284c7;
+    transform: translateX(4px);
+}
+
+/* ===== CONTENT AREA =====
+   Main page content section */
+
+content {
+    grid-area: content;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 40px;
+}
+
+content p {
+    line-height: 1.8;
+    margin: 0 0 20px 0;
+    color: #475569;
+}
+
+/* ===== FOOTER =====
+   Bottom navigation bar */
+
+footer {
+    grid-area: footer;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #cbd5e1;
+    text-align: center;
+    padding: 20px 32px;
+    font-size: 0.85rem;
+    box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12);
+}
+
+/* ===== HEADINGS =====
+   Text section headers */
+
+h2, h3, h4 {
+    margin-top: 0;
+    color: #0f172a;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+h2 { font-size: 1.875rem; margin-bottom: 24px; }
+h3 { font-size: 1.375rem; margin-bottom: 16px; }
+h4 { font-size: 1.125rem; margin-bottom: 12px; }
+
+/* ===== FORMS =====
+   Input forms and their styling */
+
+form {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+form:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
+form p {
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* ===== FILE INPUT =====
+   Large file upload area */
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 40px 20px;
+    margin-bottom: 16px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    font-family: inherit;
+    text-align: center;
+    font-size: 1rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-right: 24px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+}
+
+input[type="file"]::file-selector-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+}
+
+input[type="file"]:hover {
+    border-color: #0284c7;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e0f2fe 100%);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #0284c7;
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+}
+
+/* ===== TEXT AND OTHER FORM INPUTS =====
+   Styling for text boxes, emails, dropdowns, etc. */
+
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea, select {
+    padding: 12px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: white;
+    color: #1e293b;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+    background-color: #f8fafc;
+}
+
+/* ===== RADIO BUTTONS =====
+   Styling for radio button groups */
+
+.radio-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.radio-group label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    gap: 8px;
+    color: #475569;
+}
+
+input[type="radio"] {
+    cursor: pointer;
+    accent-color: #0284c7;
+}
+
+/* ===== BUTTONS =====
+   All button styling and states */
+
+button, input[type="submit"], input[type="button"] {
+    font-family: inherit;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+button[type="submit"], input[type="submit"], .submit {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+button[type="submit"]:hover, input[type="submit"]:hover, .submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+}
+
+button[type="submit"]:active, input[type="submit"]:active, .submit:active {
+    transform: translateY(0);
+}
+
+button[type="submit"]:disabled, input[type="submit"]:disabled, .submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button.secondary, .secondary[type="submit"] {
+    background-color: #e2e8f0;
+    color: #475569;
+    box-shadow: none;
+}
+
+button.secondary:hover, .secondary[type="submit"]:hover {
+    background-color: #cbd5e1;
+    color: #1e293b;
+}
+
+/* ===== ALIGNMENT CARDS =====
+   Individual result cards */
+
+.alignment-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    background: white;
+    overflow-x: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.alignment-card:hover {
+    border-color: #0284c7;
+    box-shadow: 0 8px 24px rgba(2, 132, 199, 0.15);
+    transform: translateY(-4px);
+}
+
+.alignment-card h4 {
+    color: #0284c7;
+    margin-top: 0;
+}
+
+.alignment-card p {
+    margin: 10px 0;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.alignment-card pre {
+    padding: 14px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+}
+
+/* ===== GAP HIGHLIGHTING =====
+   Highlights missing sections in sequences */
+
+.gap {
+    background-color: #fde047;
+    padding: 0 2px;
+    border-radius: 2px;
+    color: #78350f;
+}
+
+/* ===== MESSAGE BOXES =====
+   Styling for error and success messages */
+
+.error-message, [style*="border: 3px solid red"] {
+    background: linear-gradient(135deg, #fef2f2 0%, #fce7e6 100%);
+    border: 1.5px solid #fca5a5 !important;
+    border-radius: 10px !important;
+    padding: 16px !important;
+    margin-top: 16px !important;
+    color: #991b1b;
+    font-weight: 500;
+}
+
+.error-message p, [style*="border: 3px solid red"] p {
+    margin: 0;
+}
+
+.success-message {
+    background: linear-gradient(135deg, #f0fdf4 0%, #e7f5e3 100%);
+    border: 1.5px solid #86efac;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 16px;
+    color: #15803d;
+    font-weight: 500;
+}
+
+/* ===== TABLES =====
+   Data tables with headers and rows */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+th {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    padding: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+th, td {
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px;
+}
+
+tr:hover {
+    background-color: #f8fafc;
+}
+
+/* ===== TABS =====
+   Tabbed content panels */
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+}
+
+.tab button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 20px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 3px solid transparent;
+    flex: 1;
+    text-align: center;
+}
+
+.tab button:hover {
+    background-color: #f8fafc;
+    color: #0284c7;
+}
+
+.tab button.active {
+    background-color: #f8fafc;
+    color: #0284c7;
+    border-bottom-color: #0284c7;
+}
+
+.tabcontent {
+    display: none;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.tabcontent.active {
+    display: block;
+}
+
+/* ===== LINKS =====
+   Hyperlink styling */
+
+a {
+    color: #0284c7;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+}
+
+a:hover {
+    color: #0369a1;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+/* ===== CODE BLOCKS =====
+   Monospace code display areas */
+
+pre {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Monaco', 'Courier New', 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    overflow-x: auto;
+    line-height: 1.5;
+    color: #1e293b;
+}
+
+/* ===== SEQUENCE VIEWER =====
+   Displays DNA/protein sequences in a scrollable container */
+
+.sequence-viewer {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.sequence-viewer pre {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    padding: 16px;
+    overflow: visible;
+    background-color: transparent;
+    white-space: pre;
+}
+
+.sequence-viewer pre:not(:last-child) {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sequence-viewer pre:nth-child(2) {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== MIDI COMPONENTS =====
+   Audio player and visualizer elements */
+
+midi-player {
+    margin: 24px 0;
+}
+
+midi-visualizer {
+    margin: 24px 0;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+/* ===== CODON/BASE HIGHLIGHTING =====
+   MIDI sync visualization */
+
+.base {
+    display: inline;
+}
+
+.base.active {
+    background-color: #fbbf24;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.codon {
+    display: inline;
+}
+
+.codon.active {
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.codon.match {
+    background-color: #4caf50;
+    color: white;
+}
+
+.codon.mismatch {
+    background-color: #f44336;
+    color: white;
+}
+
+/* ===== RESPONSIVE DESIGN =====
+   Styles that adapt to different screen sizes */
+
+@media (max-width: 768px) {
+    body {
+        grid-template-areas: "header" "content" "footer";
+        grid-template-columns: 1fr;
+    }
+
+    sidebar {
+        display: none;
+    }
+
+    content {
+        padding: 24px;
+    }
+
+    header {
+        padding: 16px 20px;
+    }
+
+    header h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.125rem; }
+
+    form {
+        padding: 20px;
+    }
+
+    .alignment-card {
+        padding: 16px;
+    }
+
+    pre {
+        font-size: 0.85rem;
+        padding: 12px;
+    }
+
+    button, input[type="submit"], input[type="button"] {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    content {
+        padding: 16px;
+    }
+
+    header {
+        padding: 12px 16px;
+    }
+
+    header h1 {
+        font-size: 1.2rem;
+    }
+
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1rem; }
+
+    form {
+        padding: 16px;
+    }
+
+    .alignment-card {
+        padding: 12px;
+    }
+
+    pre {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    button, input[type="submit"], input[type="button"] {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .tab {
+        flex-direction: column;
+    }
+
+    .tab button {
+        border-bottom: 2px solid transparent;
+    }
+
+    .tab button.active {
+        border-bottom: 2px solid #0284c7;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+@media print {
+    header, footer, sidebar {
+        display: none;
+    }
+
+    content {
+        padding: 0;
+        background-color: white;
+    }
+
+    .alignment-card {
+        page-break-inside: avoid;
+    }
+}

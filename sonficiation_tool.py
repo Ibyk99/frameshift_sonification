@@ -4,7 +4,6 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from datetime import datetime
 from midiutil import MIDIFile
 import pygame
-import sys
 from sound_mappings import codons, base_map
 from Bio.Blast import NCBIXML
 

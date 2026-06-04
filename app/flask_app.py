@@ -9,7 +9,7 @@ from sonification_functions import build_track_codon, build_track_nuc
 import os
 
 app = Flask(__name__)
-app.secret_key =  settings.secret_key
+app.secret_key = settings.secret_key
 
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
@@ -19,9 +19,12 @@ Session(app)
 def index():
     result = None
     error = None
+    filename = None
     if request.method == 'POST':
         if 'xml_file' in request.files:
             file = request.files['xml_file']
+            filename = file.filename
+            session["filename"] = file.filename
             try:
                 blast_record = NCBIXML.read(file)
                 alignments = []
@@ -52,8 +55,9 @@ def index():
     else:
         # Display alignments from session if no new file was uploaded - stops page from clearing if we revisit
         result = session.get('alignments')
+        filename = session.get('filename')
 
-    return render_template('index.html', result=result, error=error), 200
+    return render_template('index.html', result=result, error=error, filename=filename), 200
 
 
 # Route for viewing an individual selected alignment from the above page

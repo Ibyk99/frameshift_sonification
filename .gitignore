@@ -64,7 +64,7 @@ db.sqlite3-journal
 # Flask stuff:
 instance/
 .webassets-cache
-flask_session/
+flask_session/*
 
 # Scrapy stuff:
 .scrapy
@@ -185,5 +185,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Project specific
-temp/
+temp/*
 results_sync.html

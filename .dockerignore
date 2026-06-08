@@ -1,0 +1,10 @@
+.git
+.gitignore
+__pycache__
+.pytest_cache
+pyproject.toml
+.python-version
+temp
+flask_session
+.venv
+venv

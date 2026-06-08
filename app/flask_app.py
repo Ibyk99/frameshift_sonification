@@ -31,8 +31,6 @@ def index():
                 for alignment in blast_record.alignments:
                     if alignment.hsps:
                         hsp = alignment.hsps[0]
-                        print(f"DEBUG alignment attributes: {dir(alignment)}")
-                        print(f"DEBUG hsp attributes: {dir(hsp)}")
                         alignments.append({
                             'query': hsp.query,
                             'subject': hsp.sbjct,
@@ -111,7 +109,6 @@ def generate_sonification():
         query_seq = request.form.get('query_seq')
         subject_seq = request.form.get('subject_seq')
         index = request.form.get('index')
-        print(index)
 
         # Build both tracks - 1 for query seq and 1 for subject seq
         track = 0
@@ -135,6 +132,5 @@ def generate_sonification():
 
 
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

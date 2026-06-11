@@ -5,7 +5,7 @@ from datetime import datetime as dt
 import settings
 from midiutil import MIDIFile
 import sound_mappings as sound_mappings
-from sonification_functions import build_track_codon, build_track_nuc
+from sonification_functions import build_track_codon, build_track_nuc, build_track
 import os
 
 app = Flask(__name__)
@@ -82,18 +82,20 @@ def serve_midi(filename):
     return send_file(full_path, mimetype='audio/midi')
 
 
-@app.route('/alignment/cleanup/<filename>')
-def delete_midi_file(filename):
-    # Prevent unintended file deletion
-    if '/' in filename or '\\' in filename or '~' in filename:
-        return redirect('/')
-    full_path = f"{settings.out_file_path}/{filename}"
+def delete_midi_file_helper(midi_filename):
+    if '/' in midi_filename or '\\' in midi_filename or '~' in midi_filename:
+        return
+    full_path = f"{settings.out_file_path}/{midi_filename}"
     try:
         if os.path.exists(full_path):
             os.remove(full_path)
     except Exception as e:
         print(f"Error deleting MIDI file: {e}")
-     
+
+
+@app.route('/alignment/cleanup/<midi_filename>')
+def delete_midi_file(midi_filename):
+    delete_midi_file_helper(midi_filename)
     return redirect('/')
 
 
@@ -101,6 +103,12 @@ def delete_midi_file(filename):
 @app.route('/alignment/sonify', methods =['POST'])
 def generate_sonification():
     if request.method == 'POST':
+
+        # Delete old MIDI file if it exists
+        old_midi_file = request.form.get('old_midi_file')
+        if old_midi_file:
+            delete_midi_file_helper(old_midi_file)
+
         # Init a midi file with 2 tracks
         # We don't want to adjust the origin as we may have some leading silences
         midi_file = MIDIFile(2, adjust_origin=False)
@@ -109,14 +117,41 @@ def generate_sonification():
         query_seq = request.form.get('query_seq')
         subject_seq = request.form.get('subject_seq')
         index = request.form.get('index')
+        stop_codon = request.form.get('stop_codon')
+        codon_or_nuc = request.form.get('codon_or_nuc')
+
 
         # Build both tracks - 1 for query seq and 1 for subject seq
         track = 0
+        stop_at_codon = True if stop_codon == "yes" else False
+        sonify_codons = False if codon_or_nuc == 'nucleotides' else True
+        sonify_nucs = False if codon_or_nuc == 'codons' else True
+
         for seq in [query_seq, subject_seq]:
             midi_file.addTrackName(track, time, f"track_{track}")
             midi_file.addTempo(track, time, tempo)
-            build_track_nuc(seq, track, midi_file, sound_mappings.base_map)
-            build_track_codon(seq, track, midi_file, sound_mappings.codons)
+
+            build_track(
+                sequence=seq,
+                track=track,
+                midi=midi_file,
+                stop=stop_at_codon,
+                codons=sonify_codons,
+                nucs=sonify_nucs,
+                b_map=sound_mappings.base_map,
+                c_map=sound_mappings.codons
+            )
+
+            # match codon_or_nuc:
+            #     case 'both':
+
+            #         build_track_nuc(seq, track, midi_file, sound_mappings.base_map)
+            #         build_track_codon(seq, track, midi_file, sound_mappings.codons)
+            #     case 'codons':
+            #         build_track_codon(seq, track, midi_file, sound_mappings.codons)
+            #     case 'nucleotides':
+            #         build_track_nuc(seq, track, midi_file, sound_mappings.base_map)
+                
             track += 1
 
         # Write to midi file
@@ -133,4 +168,4 @@ def generate_sonification():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5001)

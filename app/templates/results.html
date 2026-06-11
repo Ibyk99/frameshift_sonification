@@ -37,12 +37,22 @@
                 <input type="hidden" name="query_seq" value="{{ alignment.query }}">
                 <input type="hidden" name="subject_seq" value="{{ alignment.subject }}">
                 <input type="hidden" name="index" value="{{ index }}">
+                {% if midi_file %}<input type="hidden" name="old_midi_file" value="{{ midi_file }}">{% endif %}
 
                 <div class="radio-group">
-                    <span>Stop sonification at Stop Codon?</span>
-                    <label><input type="radio" name="stop_codon" value="yes"> Yes</label>
-                    <label><input type="radio" name="stop_codon" value="no"> No</label>
+                    <span>What would you like to sonify?</span>
+                    <label><input type="radio" name="codon_or_nuc" value="nucleotides"> Nucleotides</label>
+                    <label><input type="radio" name="codon_or_nuc" value="codons"> Codons</label>
+                    <label><input type="radio" name="codon_or_nuc" value="both" checked> Codons & Nucleotides</label>
                 </div>
+
+                <div class="radio-group" id="stop-codon-group">
+                    <span>Stop sonification of codons when a stop stop codon is reached?</span>
+                    <label><input type="radio" name="stop_codon" value="no" checked> No</label>
+                    <label><input type="radio" name="stop_codon" value="yes"> Yes</label>
+                </div>
+
+
                 <!-- Silently refresh the page a second after clicking the button - seems to help with a little bug i was having where the player wouldn't play without first refreshing the page -->
                 <button type="submit" onclick="setTimeout(() => location.reload(), 1000);">Generate Sonification</button> 
             </form>
@@ -58,5 +68,32 @@
         </div>
 
     </content>
+
+    <!-- Script to save the radio button selection - means that when the page reloads and we generate the sonfiication, the settings don't go back to the defaults -->
+    <script>
+        function updateStopCodonVisibility() {
+            const codonOrNuc = document.querySelector('input[name="codon_or_nuc"]:checked').value;
+            const stopCodonGroup = document.getElementById('stop-codon-group');
+            stopCodonGroup.style.display = (codonOrNuc === 'nucleotides') ? 'none' : 'block';
+        }
+
+        // Save selections when user changes the radio buttons
+        document.querySelector('form').addEventListener('change', () => {
+            localStorage.setItem('stop_codon', document.querySelector('input[name="stop_codon"]:checked').value);
+            localStorage.setItem('codon_or_nuc', document.querySelector('input[name="codon_or_nuc"]:checked').value);
+            updateStopCodonVisibility();
+        });
+
+        // Restore selections when page loads
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('stop_codon')) {
+                document.querySelector(`input[value="${localStorage.getItem('stop_codon')}"]`).checked = true;
+            }
+            if (localStorage.getItem('codon_or_nuc')) {
+                document.querySelector(`input[value="${localStorage.getItem('codon_or_nuc')}"]`).checked = true;
+            }
+            updateStopCodonVisibility();
+        });
+    </script>
 </body>
 </html>

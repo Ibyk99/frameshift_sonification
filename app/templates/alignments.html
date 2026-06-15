@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>Alignments - Frameshift Sonification</title>
+    <link rel="stylesheet" href="../static/css/global_layout_3.css" type="text/css">
+</head>
+<body>
+    <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
+    <content>
+        <div style="margin-bottom: 20px;">
+            <a href="/" style="text-decoration: none; color: #007bff; font-weight: bold;">← Back to Upload</a>
+        </div>
+
+        <div style="padding: 15px; background-color: #f0f0f0; border-radius: 8px; margin-bottom: 20px;">
+            {% if filename.startswith('Example:') %}
+                <h3>Example Dataset - {{ alignments|length }} alignments </h3>
+            {% else %}
+                <h3>Successfully Read file {{ filename }} - {{ alignments|length }} alignments found</h3>
+            {% endif %}
+        </div>
+
+        {% for res in alignments %}
+            <a href="/alignments/{{ loop.index0 }}" style="text-decoration: none;">
+                <div class="alignment-card" style="cursor: pointer;">
+                    <h4>Alignment {{ loop.index }}:</h4>
+                    <p><b>Hit Definition-:</b> {{ res.hit_def }}</p>
+                    <p><b>E-value:</b> {{ res.evalue }} | <b>Score:</b> {{ res.bits }} bits</p>
+                    <div class="sequence-viewer">
+                        <pre>Query:    {{ res.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+                        <pre>          {{ res.match }}</pre>
+                        <pre>Subject:  {{ res.subject|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </content>
+</body>
+</html>

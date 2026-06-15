@@ -5,15 +5,15 @@
 </head>
 <body>
     {% if midi_file %}
-        <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/alignment/cleanup/{{ midi_file }}" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
+        <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/alignments/cleanup/{{ midi_file }}?redirect_to=/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
     {% else %}
         <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
     {% endif %}
     <content>
         {% if midi_file %}
-            <p><a href="/alignment/cleanup/{{ midi_file }}" style="color: #503786;">← Back to alignments</a></p>
+            <p><a href="/alignments/cleanup/{{ midi_file }}" style="text-decoration: none; color: #007bff; font-weight: bold;">← Back to Alignments</a></p>
         {% else %}
-            <p><a href="/" style="color: #503786;">← Back to alignments</a></p>
+            <p><a href="/alignments" style="text-decoration: none; color: #007bff; font-weight: bold;">← Back to Alignments</a></p>
         {% endif %}
 
         <div class="alignment-card">
@@ -33,7 +33,7 @@
         </div>
 
         <div class="alignment-card">
-            <form method="POST" action="/alignment/sonify">
+            <form method="POST" action="/alignments/sonify">
                 <input type="hidden" name="query_seq" value="{{ alignment.query }}">
                 <input type="hidden" name="subject_seq" value="{{ alignment.subject }}">
                 <input type="hidden" name="index" value="{{ index }}">

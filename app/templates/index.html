@@ -6,37 +6,28 @@
 <body>
     <header><h1 style="font-size: 2rem; padding: 10px;"><a href="/" style="text-decoration: none; color: #f3f0f7;">Understanding Frameshift Mutations using Sonficiation</a></h1></header>
     <content>
-        <p>This is tool to sonify pairwise alignments </p>
+        <h2>A tool to sonify pairwise alignments </h2>
 
-        <!-- Upload file guidance- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file -->
-        <form method="POST" enctype="multipart/form-data"> <!-- this enctype is needed to upload a file  - https://www.w3schools.com/tags/att_form_enctype.asp -->
-            <p>Choose an XML file to upload:</p>
-            <input type="file" id="xml_file" name="xml_file" accept=".xml" required />
-            <button type="submit">Upload</button>
-        </form>
+
+
+        <div style="margin-top: 20px; padding: 15px; background-color: #f0f0f0; border-radius: 8px; display: flex; flex-direction: column; align-items: center;">
+            <h3>Choose an XML file to upload:</h3>
+            <!-- Upload file guidance- https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file -->
+            <form method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 10px; width: fit-content;"> <!-- this enctype is needed to upload a file  - https://www.w3schools.com/tags/att_form_enctype.asp -->
+                <input type="file" id="xml_file" name="xml_file" accept=".xml" />
+                <button type="submit">Upload</button>
+            </form>
+            <p>or</p>
+            <form method="POST" style="display: flex; flex-direction: column; gap: 10px; width: fit-content;">
+                <input type="hidden" name="load_example" value="true" />
+                <button type="submit">Load an Example Dataset</button>
+            </form>
+        </div>
 
         {% if error %}
             <div style='border: 3px solid red; border-radius: 8px; padding: 10px; margin-top: 5px'>  <!-- margin-top used here to create a separation from the summary div for more appealing look-->
             <p><b>Error: </b>{{ error }}</p>
             </div>
-        {% endif %}
-
-        {% if result %}
-            <h3>Successfully Read file {{ filename }} - {{ result|length }} alignments found</h3>
-            {% for res in result %}
-                <a href="/alignment/{{ loop.index0 }}" style="text-decoration: none;">
-                    <div class="alignment-card" style="cursor: pointer;">
-                        <h4>Alignment {{ loop.index }}:</h4>
-                        <p><b>Hit Definition-:</b> {{ res.hit_def }}</p>
-                        <p><b>E-value:</b> {{ res.evalue }} | <b>Score:</b> {{ res.bits }} bits</p>
-                        <div class="sequence-viewer">
-                            <pre>Query:    {{ res.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
-                            <pre>          {{ res.match }}</pre>
-                            <pre>Subject:  {{ res.subject|replace('-', '<span class="gap">-</span>')|safe }}</pre>
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
         {% endif %}
     </content>
 </body>

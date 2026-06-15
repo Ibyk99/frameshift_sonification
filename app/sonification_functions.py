@@ -59,9 +59,9 @@ def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nuc
     time = 0
     stopped = False # Flag to stop the codons from sonifying if a stop codon is hit - start set to false
 
-    gap_volume = 90
+    gap_volume = 80
 
-    nuc_volume = 80
+    nuc_volume = 60
     nuc_channel = 0
     nuc_duration = 1
     nuc_program =  11  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
@@ -107,7 +107,8 @@ def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nuc
                             codon_channel = 9
                             pitch = 39
                             midi.addNote(track, codon_channel, pitch, codon_start_time, codon_duration, codon_volume)
-                            stopped = True if stop else False # Turns on a flag to stop the codon sonification from this point onwards if desired
+                            if stop:
+                                stopped = True
                         else:
                             codon_channel = 1
                             pitch = c_map[codon_seq]['midi']

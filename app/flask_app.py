@@ -7,6 +7,7 @@ from midiutil import MIDIFile
 import sound_mappings as sound_mappings
 from sonification_functions import build_track_codon, build_track_nuc, build_track
 import os
+import logging
 
 app = Flask(__name__)
 app.secret_key = settings.secret_key
@@ -14,52 +15,71 @@ app.secret_key = settings.secret_key
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
+
+def load_alignments(file_obj):
+    alignments = []
+    for blast_record in NCBIXML.parse(file_obj):
+        for alignment in blast_record.alignments:
+            if alignment.hsps:
+                hsp = alignment.hsps[0]
+                alignments.append({
+                    'query': hsp.query,
+                    'subject': hsp.sbjct,
+                    'match': hsp.match,
+                    'evalue': hsp.expect,
+                    'bits': hsp.bits,
+                    'query_frame': hsp.frame[0],
+                    'subject_frame': hsp.frame[1],
+                    'hit_def': alignment.title,
+                    'accession': alignment.accession
+                })
+    return alignments
+
+
 # Route for uploading an XML file and viewing the alignments within it
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    result = None
     error = None
-    filename = None
     if request.method == 'POST':
         if 'xml_file' in request.files:
             file = request.files['xml_file']
-            filename = file.filename
             session["filename"] = file.filename
             try:
-                blast_record = NCBIXML.read(file)
-                alignments = []
-                for alignment in blast_record.alignments:
-                    if alignment.hsps:
-                        hsp = alignment.hsps[0]
-                        alignments.append({
-                            'query': hsp.query,
-                            'subject': hsp.sbjct,
-                            'match': hsp.match,
-                            'evalue': hsp.expect,
-                            'bits': hsp.bits,
-                            'query_frame': hsp.frame[0],
-                            'subject_frame': hsp.frame[1],
-                            'hit_def': alignment.title,
-                            'accession': alignment.accession
-                        })
-                result = alignments
-                session['alignments'] = alignments
+                result = load_alignments(file)
+                session['alignments'] = result
+                return redirect('/alignments')
             except PermissionError as e:
                 error = f"Can't read file - please check the permissions on the file > {e}"
                 return render_template('index.html', error=error), 400
             except Exception as e:
                 error = f"Failed to read XML file - please ensure a valid XML file has been provided > {e}"
                 return render_template('index.html', error=error), 400
-    else:
-        # Display alignments from session if no new file was uploaded - stops page from clearing if we revisit
-        result = session.get('alignments')
-        filename = session.get('filename')
+        elif request.form.get('load_example') == 'true':
+            try:
+                with open(settings.example_file, 'r') as f:
+                    result = load_alignments(f)
+                    session['alignments'] = result
+                    session['filename'] = 'Example: combined_blast_alignment.xml'
+                    return redirect('/alignments')
+            except Exception as e:
+                error = f"Failed to load example dataset > {e}"
+                return render_template('index.html', error=error), 400
 
-    return render_template('index.html', result=result, error=error, filename=filename), 200
+    return render_template('index.html', error=error), 200
+
+
+# Route for displaying the alignments list
+@app.route('/alignments')
+def alignments():
+    alignments = session.get('alignments', [])
+    filename = session.get('filename')
+    if not alignments:
+        return redirect('/')
+    return render_template('alignments.html', alignments=alignments, filename=filename), 200
 
 
 # Route for viewing an individual selected alignment from the above page
-@app.route('/alignment/<int:index>')
+@app.route('/alignments/<int:index>')
 def alignment_results(index):
     try:
         midi_file = request.args.get('midi_file') # Add some file validation stuff
@@ -93,14 +113,15 @@ def delete_midi_file_helper(midi_filename):
         print(f"Error deleting MIDI file: {e}")
 
 
-@app.route('/alignment/cleanup/<midi_filename>')
+@app.route('/alignments/cleanup/<midi_filename>')
 def delete_midi_file(midi_filename):
     delete_midi_file_helper(midi_filename)
-    return redirect('/')
+    redirect_to = request.args.get('redirect_to', '/alignments')
+    return redirect(redirect_to)
 
 
 # Endpoint to generate a midi file for a given alignment
-@app.route('/alignment/sonify', methods =['POST'])
+@app.route('/alignments/sonify', methods =['POST'])
 def generate_sonification():
     if request.method == 'POST':
 
@@ -142,16 +163,6 @@ def generate_sonification():
                 c_map=sound_mappings.codons
             )
 
-            # match codon_or_nuc:
-            #     case 'both':
-
-            #         build_track_nuc(seq, track, midi_file, sound_mappings.base_map)
-            #         build_track_codon(seq, track, midi_file, sound_mappings.codons)
-            #     case 'codons':
-            #         build_track_codon(seq, track, midi_file, sound_mappings.codons)
-            #     case 'nucleotides':
-            #         build_track_nuc(seq, track, midi_file, sound_mappings.base_map)
-
             track += 1
 
         # Write to midi file
@@ -162,9 +173,7 @@ def generate_sonification():
         with open(out_path_and_file, "wb") as outfile:
             midi_file.writeFile(outfile)
 
-        return redirect(f'/alignment/{int(index)}?midi_file={output_file}.mid')
-
-
+        return redirect(f'/alignments/{int(index)}?midi_file={output_file}.mid')
 
 
 if __name__ == '__main__':

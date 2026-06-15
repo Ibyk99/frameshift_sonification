@@ -151,7 +151,7 @@ def generate_sonification():
             #         build_track_codon(seq, track, midi_file, sound_mappings.codons)
             #     case 'nucleotides':
             #         build_track_nuc(seq, track, midi_file, sound_mappings.base_map)
-                
+
             track += 1
 
         # Write to midi file

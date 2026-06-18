@@ -55,22 +55,22 @@ def build_track_codon(sequence: str, track: int, midi:str, c_map=codons, window_
 
 
 
-def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nucs:bool, b_map=base_map, c_map=codons, window_size=3):
+def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nucs:bool, b_map=base_map, c_map=codons, window_size=3, codon_inst=1, nuc_inst=11):
     time = 0
     stopped = False # Flag to stop the codons from sonifying if a stop codon is hit - start set to false
 
     gap_volume = 80
 
-    nuc_volume = 60
+    nuc_volume = 60 if codons else 90
     nuc_channel = 0
     nuc_duration = 1
-    nuc_program =  11  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
+    nuc_program =  nuc_inst  # Represents the instrument, full mapping here: https://www.ccarh.org/courses/253/handout/gminstruments/
     midi.addProgramChange(track, nuc_channel, time, nuc_program)
 
     codon_volume = 100
     codon_channel = 1
     codon_duration = window_size
-    codon_program = 1
+    codon_program = codon_inst
     codon_stop_channel = 2
     codon_stop_program = 82
     midi.addProgramChange(track, codon_channel, time, codon_program)

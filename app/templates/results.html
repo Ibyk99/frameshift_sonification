@@ -25,6 +25,15 @@
             <p><b>Query Reading frame:</b> {{ alignment.query_frame }} </p>
             <p><b>Subject Reading frame:</b> {{ alignment.subject_frame }} </p>
 
+            {% if midi_file %}
+                <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/html-midi-player@1.5.0"></script>
+                <midi-player
+                src="/temp/{{ midi_file }}"
+                sound-font visualizer="#myVisualizer">
+                </midi-player>
+                <!-- <midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer> -->
+            {% endif %}
+
             <div class="sequence-viewer">
                 <pre>Query:    {{ alignment.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
                 <pre>          {{ alignment.match }}</pre>
@@ -33,7 +42,8 @@
         </div>
 
         <div class="alignment-card">
-            <form method="POST" action="/alignments/sonify">
+            <div class="sonification-container">
+                <form method="POST" action="/alignments/sonify">
                 <input type="hidden" name="query_seq" value="{{ alignment.query }}">
                 <input type="hidden" name="subject_seq" value="{{ alignment.subject }}">
                 <input type="hidden" name="index" value="{{ index }}">
@@ -54,17 +64,45 @@
 
 
                 <!-- Silently refresh the page a second after clicking the button - seems to help with a little bug i was having where the player wouldn't play without first refreshing the page -->
-                <button type="submit" onclick="setTimeout(() => location.reload(), 1000);">Generate Sonification</button> 
+                <button type="submit" onclick="setTimeout(() => location.reload(), 1000);">Generate Sonification</button>
             </form>
 
-            {% if midi_file %}
-                <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/html-midi-player@1.5.0"></script>
-                <midi-player
-                src="/temp/{{ midi_file }}"
-                sound-font visualizer="#myVisualizer">
-                </midi-player>
-                <!-- <midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer> -->
-            {% endif %}
+                <div class="sound-key">
+                    <h4>Sound Key</h4>
+                    <div class="sound-key-item">
+                        <span class="sound-symbol">💥</span>
+                        <span class="sound-label">Gap</span>
+                    </div>
+                    <div class="sound-key-item">
+                        <span class="sound-symbol">👏</span>
+                        <span class="sound-label">Stop Codon</span>
+                    </div>
+                    <div class="sound-key-item">
+                        <span class="sound-symbol">🎵</span>
+                        <span class="sound-label">Codon</span>
+                    </div>
+                    <div class="sound-key-item">
+                        <span class="sound-symbol">♪</span>
+                        <span class="sound-label">Nucleotide</span>
+                    </div>
+                    <hr class="sound-key-divider">
+                    <h4>Query Sequence</h4>
+                    <div class="sound-key-item">
+                        <span class="sound-label">🎹 Piano - Codons</span>
+                    </div>
+                    <div class="sound-key-item">
+                        <img src="../static/images/vibraphone_cartoon.png" alt="Vibraphone" class="sound-key-image">
+                        <span class="sound-label">Vibraphone - Nucleotides</span>
+                    </div>
+                    <h4>Subject Sequence</h4>
+                    <div class="sound-key-item">
+                        <span class="sound-label">🎻 Cello - Codons</span>
+                    </div>
+                    <div class="sound-key-item">
+                        <span class="sound-label">🪈 Flute - Nucleotides</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </content>

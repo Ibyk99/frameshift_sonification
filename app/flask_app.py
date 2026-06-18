@@ -148,6 +148,13 @@ def generate_sonification():
         sonify_codons = False if codon_or_nuc == 'nucleotides' else True
         sonify_nucs = False if codon_or_nuc == 'codons' else True
 
+        seq_config = {
+            query_seq: {"nuc_inst": 11 ,
+                        "codon_inst": 1},
+            subject_seq: {"nuc_inst": 73 ,
+                          "codon_inst": 42}
+                                    }
+        
         for seq in [query_seq, subject_seq]:
             midi_file.addTrackName(track, time, f"track_{track}")
             midi_file.addTempo(track, time, tempo)
@@ -160,7 +167,9 @@ def generate_sonification():
                 codons=sonify_codons,
                 nucs=sonify_nucs,
                 b_map=sound_mappings.base_map,
-                c_map=sound_mappings.codons
+                c_map=sound_mappings.codons,
+                codon_inst=seq_config[seq]["codon_inst"],
+                nuc_inst=seq_config[seq]["nuc_inst"]
             )
 
             track += 1

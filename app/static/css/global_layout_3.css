@@ -51,6 +51,7 @@ header a:hover {
     transform: translateY(-1px);
 }
 
+
 /* ===== SIDEBAR =====
    Left navigation panel */
 
@@ -200,27 +201,6 @@ input[type="file"]:focus {
     outline: none;
     border-color: #0284c7;
     box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
-}
-
-/* ===== TEXT AND OTHER FORM INPUTS =====
-   Styling for text boxes, emails, dropdowns, etc. */
-
-input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea, select {
-    padding: 12px 14px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 1rem;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: white;
-    color: #1e293b;
-}
-
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: #0284c7;
-    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
-    background-color: #f8fafc;
 }
 
 /* ===== RADIO BUTTONS =====
@@ -406,56 +386,6 @@ tr:hover {
     background-color: #f8fafc;
 }
 
-/* ===== TABS =====
-   Tabbed content panels */
-
-.tab {
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
-    background-color: white;
-    border-radius: 10px 10px 0 0;
-    display: flex;
-}
-
-.tab button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 20px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 1rem;
-    font-weight: 600;
-    color: #475569;
-    border-bottom: 3px solid transparent;
-    flex: 1;
-    text-align: center;
-}
-
-.tab button:hover {
-    background-color: #f8fafc;
-    color: #0284c7;
-}
-
-.tab button.active {
-    background-color: #f8fafc;
-    color: #0284c7;
-    border-bottom-color: #0284c7;
-}
-
-.tabcontent {
-    display: none;
-    padding: 24px;
-    border: 1px solid #e2e8f0;
-    border-top: none;
-    background-color: white;
-    border-radius: 0 0 10px 10px;
-}
-
-.tabcontent.active {
-    display: block;
-}
-
 /* ===== LINKS =====
    Hyperlink styling */
 
@@ -515,6 +445,77 @@ pre {
 
 .sequence-viewer pre:nth-child(2) {
     background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== SONIFICATION CONTAINER =====
+   Layout for form and sound key side by side */
+
+.sonification-container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.sonification-container form {
+    flex: 4;
+    margin: 0;
+}
+
+/* ===== SOUND KEY =====
+   Legend showing audio symbols and their meanings */
+
+.sound-key {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    min-width: 220px;
+}
+
+.sound-key h4 {
+    margin: 0 0 8px 0;
+    color: #0f172a;
+}
+
+.sound-key h5 {
+    margin: 12px 0 4px 0;
+}
+
+.sound-key-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+.sound-symbol {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sound-label {
+    font-size: 0.85rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+.sound-key-divider {
+    border: none;
+    border-top: 1px solid #cbd5e1;
+    margin: 4px 0;
+}
+
+.sound-key-image {
+    height: 2rem;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ===== MIDI COMPONENTS =====
@@ -655,21 +656,18 @@ midi-visualizer {
         width: 100%;
     }
 
-    .tab {
-        flex-direction: column;
-    }
-
-    .tab button {
-        border-bottom: 2px solid transparent;
-    }
-
-    .tab button.active {
-        border-bottom: 2px solid #0284c7;
-    }
-
     .radio-group {
         flex-direction: column;
         gap: 12px;
+    }
+
+    .sonification-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sound-key {
+        min-width: auto;
     }
 }
 

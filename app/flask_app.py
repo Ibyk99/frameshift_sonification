@@ -21,18 +21,18 @@ def load_alignments(file_obj):
     for blast_record in NCBIXML.parse(file_obj):
         for alignment in blast_record.alignments:
             if alignment.hsps:
-                hsp = alignment.hsps[0]
-                alignments.append({
-                    'query': hsp.query,
-                    'subject': hsp.sbjct,
-                    'match': hsp.match,
-                    'evalue': hsp.expect,
-                    'bits': hsp.bits,
-                    'query_frame': hsp.frame[0],
-                    'subject_frame': hsp.frame[1],
-                    'hit_def': alignment.title,
-                    'accession': alignment.accession
-                })
+                for hsp in alignment.hsps:
+                    alignments.append({
+                        'query': hsp.query,
+                        'subject': hsp.sbjct,
+                        'match': hsp.match,
+                        'evalue': hsp.expect,
+                        'bits': hsp.bits,
+                        'query_frame': hsp.frame[0],
+                        'subject_frame': hsp.frame[1],
+                        'hit_def': alignment.title,
+                        'accession': alignment.accession
+                    })
     return alignments
 
 

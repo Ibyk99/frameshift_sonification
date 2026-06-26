@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>Alignment Results - Frameshift Sonification</title>
-    <link rel="stylesheet" href="../static/css/global_layout_3.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/global_layout.css" type="text/css">
 </head>
 <body>
     {% if midi_file %}
@@ -28,16 +28,19 @@
             {% if midi_file %}
                 <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/html-midi-player@1.5.0"></script>
                 <midi-player
+                id="midiPlayer"
                 src="/temp/{{ midi_file }}"
                 sound-font visualizer="#myVisualizer">
                 </midi-player>
                 <!-- <midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer> -->
+                 <p>Note: If Audio doesn't play, try refreshing the page first</p>
+                 <script src="../static/js/midi_sync.js"></script>
             {% endif %}
 
             <div class="sequence-viewer">
-                <pre>Query:    {{ alignment.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+                <pre>Query:    <span id="queryBases">{{ alignment.query|replace('-', '<span class="gap">-</span>')|safe }}</span></pre>
                 <pre>          {{ alignment.match }}</pre>
-                <pre>Subject:  {{ alignment.subject|replace('-', '<span class="gap">-</span>')|safe }}</pre>
+                <pre>Subject:  <span id="subjectBases">{{ alignment.subject|replace('-', '<span class="gap">-</span>')|safe }}</span></pre>
             </div>
         </div>
 
@@ -63,8 +66,8 @@
                 </div>
 
 
-                <!-- Silently refresh the page a second after clicking the button - seems to help with a little bug i was having where the player wouldn't play without first refreshing the page -->
-                <button type="submit" onclick="setTimeout(() => location.reload(), 1000);">Generate Sonification</button>
+                <!-- Silently refresh the page 2 seconds after clicking the button - seems to help with a little bug i was having where the player wouldn't play without first refreshing the page -->
+                <button type="submit" onclick="setTimeout(() => location.reload(), 2000);">Generate Sonification</button>
             </form>
 
                 <div class="sound-key">
@@ -132,6 +135,7 @@
             }
             updateStopCodonVisibility();
         });
+
     </script>
 </body>
 </html>

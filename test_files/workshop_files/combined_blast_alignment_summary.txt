@@ -1,0 +1,60 @@
+================================================================================
+BLAST HITS WITH INSERTIONS/DELETIONS
+Combined Alignment Results Summary (Filtered)
+================================================================================
+
+ITERATION 1:
+  Hit 1: Homo sapiens (Human) - gulonolactone (L-) oxidase, pseudogene (GULOP)
+    - RefSeq ID: gi|157817250|ref|NG_001136.2| (chromosome 8)
+    - 1 HSP with gaps: 164bp, E-value=4.37e-44 (Excellent match)
+
+ITERATION 2:
+  Hit 1: Canis lupus familiaris (Domestic Dog) - NCBI Reference Sequence NC_052534.1:104894818-104907645 (12828 bp)
+    - 2 HSPs with gaps
+    - Best match: 191bp with 9 gaps, E-value=2.23e-44
+
+ITERATION 3:
+  Hit 1: Panthera leo (Lion) - NCBI Reference Sequence NC_072405.2:35904500-35935394 (30895 bp)
+    - 3 HSPs with gaps
+    - Best match: 156bp with 4 gaps, E-value=3.18e-34
+
+ITERATION 4:
+  Hit 1: Canis lupus familiaris (Domestic Dog) - NCBI Reference Sequence NC_037335.1:74669453-74694234 (24782 bp)
+    - 1 HSP with gaps: 201bp with 2 gaps, E-value=2.38e-47
+
+ITERATION 5:
+  Hit 1: Lynx canadensis (Canada Lynx) - NCBI Reference Sequence NC_051837.1:3968907-3972183 (3277 bp)
+    - 2 HSPs with gaps
+    - Best match: 73bp with 4 gaps, E-value=1.43e-14
+
+ITERATION 7:
+  Hit 1: Tursiops truncatus (Bottlenose Dolphin) - NCBI Reference Sequence NW_026947507.1:39982782-39999163
+    - 1 HSP with gaps: 193bp with gaps, E-value=3.79e-49
+
+ITERATION 8:
+  Hit 1: Homo sapiens (Human) - NCBI Reference Sequence NC_000008.11:27560277-27589071 (28795 bp)
+    - 3 HSPs with gaps
+    - Best match: 158bp with gaps, E-value=5.88e-53
+
+ITERATION 13:
+  Hit 1: Psittacus erithacus (African Grey Parrot) - GenBank Reference KN187370.1:444861-486051
+    - 2 HSPs with gaps
+    - Best match: 192bp with gaps, E-value=2.50e-62
+
+  Hit 2: Psittacus erithacus (African Grey Parrot) - Whole Genome Shotgun
+    - GenBank ID: gb|WYDI02000406.1|
+    - Voucher: IRGN MU2MI4XJKV isolate MU2MI4XJKV 406
+    - 1 HSP with gaps: 100bp, E-value=7.70e-32
+
+================================================================================
+SUMMARY:
+- Total Iterations with gaps: 8 (out of 13)
+- Total Hits with gaps: 9
+- Total HSPs with gaps: 16
+- Filter Applied: Removed all HSPs with 0 insertions/deletions (49 removed)
+- Species Matches:
+  * Primates: Homo sapiens (Human) - 2 hits
+  * Carnivores: Canis lupus familiaris (Dog), Panthera leo (Lion), Lynx canadensis (Lynx)
+  * Marine Mammals: Tursiops truncatus (Bottlenose Dolphin)
+  * Birds: Psittacus erithacus (African Grey Parrot) - 2 hits
+================================================================================

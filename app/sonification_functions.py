@@ -55,7 +55,7 @@ def build_track_codon(sequence: str, track: int, midi:str, c_map=codons, window_
 
 
 
-def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nucs:bool, b_map=base_map, c_map=codons, window_size=3, codon_inst=1, nuc_inst=11):
+def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nucs:bool, b_map=base_map, c_map=codons, window_size=3, codon_inst=1, nuc_inst=11, reading_frame=1):
     time = 0
     stopped = False # Flag to stop the codons from sonifying if a stop codon is hit - start set to false
 
@@ -77,10 +77,12 @@ def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nuc
     midi.addProgramChange(track, codon_stop_channel, time, codon_stop_program)
 
     codon = [] # Using a list here rather than a string as strings are immutable - very small performance advantage
+    frame_offset = reading_frame - 1
 
-    for base in sequence:
+    for base in sequence[frame_offset:]:
         base = base.upper()
-
+        if stopped:
+            break
         # Handle nucleotides
         # Sound for a gap is always played - obvious marker for a frameshift
         if base == '-':
@@ -95,14 +97,13 @@ def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nuc
         if codons:
             if base != '-': # Ignore gaps as these don't form the actual codon
                 # Signify the start point of a new codon - this is the time-point where the note for this codon will be placed.
-                if len(codon) == 0: 
+                if len(codon) == 0:
                     codon_start_time = time
                 codon.append(base)
                 # When we have a complete codon find what is maps to
                 if len(codon) == 3:
                     codon_seq = ''.join(codon)
                     if codon_seq in c_map:
-                        # Play a different sound to signify that this is a stop codon
                         if c_map[codon_seq]['name'] == "Stop":
                             codon_channel = 9
                             pitch = 39
@@ -112,13 +113,6 @@ def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nuc
                         else:
                             codon_channel = 1
                             pitch = c_map[codon_seq]['midi']
-
-                        if stopped:
-                            # If the stopped flag is on - replace the note with a low droning sound
-                            pitch = 67
-                            codon_volume = 50
-                            midi.addNote(track, codon_stop_channel, pitch, codon_start_time, codon_duration, codon_volume)
-                        else:
                             midi.addNote(track, codon_channel, pitch, codon_start_time, codon_duration, codon_volume)
 
                     codon = []

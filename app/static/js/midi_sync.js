@@ -36,27 +36,44 @@ function initializeSync() {
     function wrapBases(element) {
         const text = element.textContent;
         element.innerHTML = '';
+        const readingFrame = window.readingFrame || 1;
+        const frameOffset = readingFrame - 1;
         let codonCount = 0;
         let codonSpan = null;
+        let currentCodonIndex = -1;
 
         for (let i = 0; i < text.length; i++) {
             const char = text[i];
 
-            if (codonCount % 3 === 0) {
-                codonSpan = document.createElement('span');
-                codonSpan.className = 'codon';
-                element.appendChild(codonSpan);
+            if (char !== '-') {
+                // Determine which codon this base belongs to (accounting for frame offset)
+                const targetCodonIndex = Math.floor((codonCount - frameOffset) / 3);
+
+                // Create new codon span if we've moved to a new codon
+                if (targetCodonIndex !== currentCodonIndex && codonCount >= frameOffset) {
+                    codonSpan = document.createElement('span');
+                    codonSpan.className = 'codon';
+                    element.appendChild(codonSpan);
+                    currentCodonIndex = targetCodonIndex;
+                }
+
+                codonCount++;
             }
 
             const span = document.createElement('span');
             span.textContent = char;
-            codonSpan.appendChild(span);
 
             if (char !== '-') {
                 span.className = 'base';
-                codonCount++;
             } else {
                 span.className = 'gap';
+            }
+
+            // Append to codon if we have one, otherwise append directly to element
+            if (codonSpan) {
+                codonSpan.appendChild(span);
+            } else {
+                element.appendChild(span);
             }
         }
     }
@@ -76,7 +93,30 @@ function initializeSync() {
         // Build a map of all characters (bases and gaps) with their indices
         const allElements = [];
         let baseIndex = 0;
+        const readingFrame = window.readingFrame || 1;
+        const frameOffset = readingFrame - 1;
 
+        // First, collect elements that are directly in the container (before any codons)
+        for (const child of container.children) {
+            if (!child.classList.contains('codon')) {
+                if (child.classList.contains('base')) {
+                    allElements.push({
+                        type: 'base',
+                        index: baseIndex++,
+                        codonIndex: -1,  // Not in any MIDI codon
+                        element: child
+                    });
+                } else {
+                    allElements.push({
+                        type: 'gap',
+                        codonIndex: -1,
+                        element: child
+                    });
+                }
+            }
+        }
+
+        // Then, collect elements from codon spans
         const codons = Array.from(container.querySelectorAll('.codon'));
         for (let codonIndex = 0; codonIndex < codons.length; codonIndex++) {
             const codon = codons[codonIndex];
@@ -99,15 +139,16 @@ function initializeSync() {
         }
 
         // Build mapping from MIDI beat (base index) to character position
+        // MIDI beat 0 corresponds to the base at frameOffset in the original sequence
         const mapping = [];
-        for (let baseIdx = 0; baseIdx < baseIndex; baseIdx++) {
+        for (let midiTime = 0; midiTime < baseIndex - frameOffset; midiTime++) {
             let charPos = 0;
             let currentBaseIdx = 0;
 
-            // Find the character position of this base
+            // Find the character position of the base at (frameOffset + midiTime)
             for (let i = 0; i < allElements.length; i++) {
                 if (allElements[i].type === 'base') {
-                    if (currentBaseIdx === baseIdx) {
+                    if (currentBaseIdx === frameOffset + midiTime) {
                         charPos = i;
                         break;
                     }
@@ -115,7 +156,17 @@ function initializeSync() {
                 }
             }
 
-            mapping.push(allElements[charPos]);
+            const element = allElements[charPos];
+            // Calculate which codon this base belongs to (accounting for frame offset)
+            // Bases before frameOffset are not in any codon
+            const midiCodonIndex = Math.floor(midiTime / 3);
+
+            mapping.push({
+                type: element.type,
+                index: frameOffset + midiTime,  // Actual base index in the sequence
+                codonIndex: midiCodonIndex,
+                element: element.element
+            });
         }
 
         return mapping;
@@ -154,13 +205,17 @@ function initializeSync() {
         const subjectAA = getCodonAA(codonIndex, subjectCodons);
 
         if (showNucleotides) {
-            if (queryBases[baseIndex]) queryBases[baseIndex].classList.add('active');
-            if (subjectBases[baseIndex]) subjectBases[baseIndex].classList.add('active');
+            const shouldHighlightQuery = !state.queryStopCodonIndex || codonIndex < state.queryStopCodonIndex;
+            const shouldHighlightSubject = !state.subjectStopCodonIndex || codonIndex < state.subjectStopCodonIndex;
+
+            if (shouldHighlightQuery && queryBases[baseIndex]) queryBases[baseIndex].classList.add('active');
+            if (shouldHighlightSubject && subjectBases[baseIndex]) subjectBases[baseIndex].classList.add('active');
         }
 
         if (showCodons && queryCodons[codonIndex]) {
             if (queryAA === '*') {
                 queryCodons[codonIndex].classList.add('stop-codon');
+                queryCodons[codonIndex].classList.add(queryAA === subjectAA ? 'match' : 'mismatch');
             } else if (!state.queryStopCodonIndex) {
                 queryCodons[codonIndex].classList.add('active');
                 queryCodons[codonIndex].classList.add(queryAA === subjectAA ? 'match' : 'mismatch');
@@ -170,6 +225,7 @@ function initializeSync() {
         if (showCodons && subjectCodons[codonIndex]) {
             if (subjectAA === '*') {
                 subjectCodons[codonIndex].classList.add('stop-codon');
+                subjectCodons[codonIndex].classList.add(queryAA === subjectAA ? 'match' : 'mismatch');
             } else if (!state.subjectStopCodonIndex) {
                 subjectCodons[codonIndex].classList.add('active');
                 subjectCodons[codonIndex].classList.add(queryAA === subjectAA ? 'match' : 'mismatch');

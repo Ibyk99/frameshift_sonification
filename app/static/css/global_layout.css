@@ -566,9 +566,11 @@ midi-visualizer {
     color: white;
 }
 
-.codon.stop-codon {
-    color: #8b0000;
-    font-weight: bold;
+.codon.stop-codon,
+.codon.stop-codon.match,
+.codon.stop-codon.mismatch {
+    background-color: #8b0000;
+    color: white;
 }
 
 /* ===== RESPONSIVE DESIGN =====

@@ -18,12 +18,10 @@
 
         <div class="alignment-card">
             <h3>Alignment Details</h3>
-            <p><b>Hit Definition-:</b> {{ alignment.hit_def }}</p>
+            <p><b>Hit Definition:</b> {{ alignment.hit_def }}</p>
             <p><b>E-value:</b> {{ alignment.evalue }}</p>
             <p><b>Score:</b> {{ alignment.bits }} bits</p>
             <p><b>Accession:</b> {{ alignment.accession }}</p>
-            <p><b>Query Reading frame:</b> {{ alignment.query_frame }} </p>
-            <p><b>Subject Reading frame:</b> {{ alignment.subject_frame }} </p>
 
             {% if midi_file %}
                 <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/html-midi-player@1.5.0"></script>
@@ -34,6 +32,9 @@
                 </midi-player>
                 <!-- <midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer> -->
                  <p>Note: If Audio doesn't play, try refreshing the page first</p>
+                 <script>
+                    window.readingFrame = parseInt(localStorage.getItem('reading_frame') || '1');
+                 </script>
                  <script src="../static/js/midi_sync.js"></script>
             {% endif %}
 
@@ -65,9 +66,15 @@
                     <label><input type="radio" name="stop_codon" value="yes"> Yes</label>
                 </div>
 
+                <div class="radio-group">
+                    <span>Reading Frame</span>
+                    <label><input type="radio" name="reading_frame" value="1" checked> 1</label>
+                    <label><input type="radio" name="reading_frame" value="2"> 2</label>
+                    <label><input type="radio" name="reading_frame" value="3"> 3</label>
+                </div>
 
                 <!-- Silently refresh the page 2 seconds after clicking the button - seems to help with a little bug i was having where the player wouldn't play without first refreshing the page -->
-                <button type="submit" onclick="setTimeout(() => location.reload(), 2000);">Generate Sonification</button>
+                <button type="submit">Generate Sonification</button>
             </form>
 
                 <div class="sound-key">
@@ -118,20 +125,33 @@
             stopCodonGroup.style.display = (codonOrNuc === 'nucleotides') ? 'none' : 'block';
         }
 
+        const form = document.querySelector('form');
+
         // Save selections when user changes the radio buttons
-        document.querySelector('form').addEventListener('change', () => {
+        form.addEventListener('change', () => {
             localStorage.setItem('stop_codon', document.querySelector('input[name="stop_codon"]:checked').value);
             localStorage.setItem('codon_or_nuc', document.querySelector('input[name="codon_or_nuc"]:checked').value);
+            const readingFrame = document.querySelector('input[name="reading_frame"]:checked').value;
+            localStorage.setItem('reading_frame', readingFrame);
             updateStopCodonVisibility();
         });
+
+        // // Update hidden input and reload page on form submit
+        // form.addEventListener('submit', (e) => {
+        //     document.querySelector('input[type="hidden"][name="reading_frame"]').value = document.querySelector('input[name="reading_frame"]:checked').value;
+        //     setTimeout(() => location.reload(), 2000);
+        // });
 
         // Restore selections when page loads
         window.addEventListener('load', () => {
             if (localStorage.getItem('stop_codon')) {
-                document.querySelector(`input[value="${localStorage.getItem('stop_codon')}"]`).checked = true;
+                document.querySelector(`input[name="stop_codon"][value="${localStorage.getItem('stop_codon')}"]`).checked = true;
             }
             if (localStorage.getItem('codon_or_nuc')) {
-                document.querySelector(`input[value="${localStorage.getItem('codon_or_nuc')}"]`).checked = true;
+                document.querySelector(`input[name="codon_or_nuc"][value="${localStorage.getItem('codon_or_nuc')}"]`).checked = true;
+            }
+            if (localStorage.getItem('reading_frame')) {
+                document.querySelector(`input[name="reading_frame"][value="${localStorage.getItem('reading_frame')}"]`).checked = true;
             }
             updateStopCodonVisibility();
         });

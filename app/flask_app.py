@@ -5,9 +5,10 @@ from datetime import datetime as dt
 import settings
 from midiutil import MIDIFile
 import sound_mappings as sound_mappings
-from sonification_functions import build_track_codon, build_track_nuc, build_track
+from sonification_functions import build_track
 import os
 import logging
+
 
 app = Flask(__name__)
 app.secret_key = settings.secret_key
@@ -30,7 +31,7 @@ def load_alignments(file_obj):
                         'bits': hsp.bits,
                         'query_frame': hsp.frame[0],
                         'subject_frame': hsp.frame[1],
-                        'hit_def': alignment.title,
+                        'hit_def': alignment.title.split(' ', 1)[1],  # XML parser seems to prefix the hit_id to the hit_def and call it a title - Here we remove the id to make it more readable - looks ok in the testing i've done but may be weird in some outlier cases?
                         'accession': alignment.accession
                     })
     return alignments
@@ -140,6 +141,8 @@ def generate_sonification():
         index = request.form.get('index')
         stop_codon = request.form.get('stop_codon')
         codon_or_nuc = request.form.get('codon_or_nuc')
+        reading_frame = int(request.form.get('reading_frame', 1))
+
 
 
         # Build both tracks - 1 for query seq and 1 for subject seq
@@ -169,7 +172,8 @@ def generate_sonification():
                 b_map=sound_mappings.base_map,
                 c_map=sound_mappings.codons,
                 codon_inst=seq_config[seq]["codon_inst"],
-                nuc_inst=seq_config[seq]["nuc_inst"]
+                nuc_inst=seq_config[seq]["nuc_inst"],
+                reading_frame=reading_frame
             )
 
             track += 1

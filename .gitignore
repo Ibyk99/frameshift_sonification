@@ -187,3 +187,7 @@ __marimo__/
 # Project specific
 temp/*
 results_sync.html
+app/settings.py
+terraform/.terraform*
+terraform/terraform.tfstate
+.terraform*

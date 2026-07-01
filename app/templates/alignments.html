@@ -22,7 +22,7 @@
             <a href="/alignments/{{ loop.index0 }}" style="text-decoration: none;">
                 <div class="alignment-card" style="cursor: pointer;">
                     <h4>Alignment {{ loop.index }}:</h4>
-                    <p><b>Hit Definition-:</b> {{ res.hit_def }}</p>
+                    <p><b>Hit Definition:</b> {{ res.hit_def }}</p>
                     <p><b>E-value:</b> {{ res.evalue }} | <b>Score:</b> {{ res.bits }} bits</p>
                     <div class="sequence-viewer">
                         <pre>Query:    {{ res.query|replace('-', '<span class="gap">-</span>')|safe }}</pre>

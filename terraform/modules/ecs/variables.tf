@@ -8,14 +8,14 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "public_subnet_id" {
-  description = "Public subnet ID for app load balancer"
-  type        = string
+variable "public_subnet_ids" {
+  description = "Public subnet IDs for app load balancer"
+  type        = list(string)
 }
 
-variable "private_subnet_id" {
-  description = "Private subnet ID for ECS tasks"
-  type        = string
+variable "private_subnet_ids" {
+  description = "Private subnet IDs for ECS tasks"
+  type        = list(string)
 }
 
 variable "container_image" {

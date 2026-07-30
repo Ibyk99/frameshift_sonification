@@ -7,6 +7,7 @@ variable "app_name" {
 variable "container_image" {
   description = "Container image URI from ECR"
   type        = string
+  default = "433289389071.dkr.ecr.eu-west-2.amazonaws.com/sonification/sonification_app:latest"
 }
 
 variable "container_port" {

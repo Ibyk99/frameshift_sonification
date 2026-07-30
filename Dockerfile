@@ -15,6 +15,6 @@ COPY . .
 RUN /flask_env/bin/python -m pip install -r requirements.txt &&\
     mkdir -p /flask_app/flask_session && mkdir -p temp
 
-EXPOSE 5000
+EXPOSE 5001
 
 ENTRYPOINT ["/flask_env/bin/python", "app/flask_app.py"]

@@ -8,3 +8,4 @@ temp
 flask_session
 .venv
 venv
+terraform

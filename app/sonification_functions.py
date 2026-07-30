@@ -55,10 +55,10 @@ def build_track_codon(sequence: str, track: int, midi:str, c_map=codons, window_
 
 
 
-def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nucs:bool, b_map=base_map, c_map=codons, window_size=3, codon_inst=1, nuc_inst=11, reading_frame=1):
+def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nucs:bool, b_map=base_map, c_map=codons, codon_inst=1, nuc_inst=11, reading_frame=1):
     time = 0
     stopped = False # Flag to stop the codons from sonifying if a stop codon is hit - start set to false
-
+    
     gap_volume = 80
 
     nuc_volume = 60 if codons else 90
@@ -69,6 +69,7 @@ def build_track(sequence: str, track: int, midi:str, stop:bool, codons:bool, nuc
 
     codon_volume = 100
     codon_channel = 1
+    window_size = 3
     codon_duration = window_size
     codon_program = codon_inst
     codon_stop_channel = 2

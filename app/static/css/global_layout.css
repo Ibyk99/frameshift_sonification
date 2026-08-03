@@ -230,6 +230,34 @@ input[type="radio"] {
     accent-color: #0284c7;
 }
 
+/* ===== COLORBLIND TOGGLE =====
+   Checkbox for colourblind mode */
+
+.colourblind-toggle {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.colourblind-toggle label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    gap: 12px;
+    color: #475569;
+}
+
+.colourblind-toggle input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #0284c7;
+    width: 18px;
+    height: 18px;
+}
+
 /* ===== BUTTONS =====
    All button styling and states */
 
@@ -323,10 +351,10 @@ button.secondary:hover, .secondary[type="submit"]:hover {
    Highlights missing sections in sequences */
 
 .gap {
-    background-color: #fde047;
+    background-color: #00b4a0;
     padding: 0 2px;
     border-radius: 2px;
-    color: #78350f;
+    color: white;
 }
 
 /* ===== MESSAGE BOXES =====
@@ -465,24 +493,40 @@ pre {
    Legend showing audio symbols and their meanings */
 
 .sound-key {
-    flex: 0 0 auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 28px;
-    background: #f8fafc;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    min-width: 220px;
 }
 
 .sound-key h4 {
-    margin: 0 0 8px 0;
+    margin: 0 0 16px 0;
     color: #0f172a;
 }
 
 .sound-key h5 {
-    margin: 12px 0 4px 0;
+    margin: 0 0 8px 0;
+    font-size: 0.95rem;
+    color: #0f172a;
+}
+
+.sound-key-content {
+    display: flex;
+    gap: 32px;
+}
+
+.sound-symbols-section {
+    flex: 1;
+}
+
+.sound-instruments-section {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+}
+
+.instruments-column {
+    flex: 1;
 }
 
 .sound-key-item {
@@ -516,6 +560,104 @@ pre {
     height: 2rem;
     width: auto;
     object-fit: contain;
+}
+
+/* ===== KEYS CONTAINER =====
+   Layout for colour and sound keys side by side */
+
+.keys-container {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ===== CODON COLOUR KEY =====
+   Legend for codon highlighting colours */
+
+.colour-key {
+    flex: 1;
+}
+
+.colour-key-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.colour-key h4 {
+    margin: 0 !important;
+    color: #0f172a;
+}
+
+.colourblind-toggle-inline {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    gap: 8px;
+    color: #475569;
+    white-space: nowrap;
+}
+
+.colourblind-toggle-inline input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #0284c7;
+}
+
+.colour-key-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.colour-swatch {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.colour-swatch.colour-match {
+    background-color: #4caf50;
+}
+
+.colour-swatch.colour-mismatch {
+    background-color: #f44336;
+}
+
+.colour-swatch.colour-stop {
+    background-color: #8b0000;
+}
+
+.colour-swatch.colour-active {
+    background-color: #fbbf24;
+}
+
+.colour-swatch.colour-gap {
+    background-color: #00b4a0;
+}
+
+body.colourblind-mode .colour-swatch.colour-match {
+    background-color: #0072b2;
+}
+
+body.colourblind-mode .colour-swatch.colour-mismatch {
+    background-color: #e69f00;
+}
+
+body.colourblind-mode .colour-swatch.colour-stop {
+    background-color: #d55e00;
+}
+
+body.colourblind-mode .colour-swatch.colour-active {
+    background-color: #f0e442;
 }
 
 /* ===== MIDI COMPONENTS =====
@@ -570,6 +712,34 @@ midi-visualizer {
 .codon.stop-codon.match,
 .codon.stop-codon.mismatch {
     background-color: #8b0000;
+    color: white;
+}
+
+/* ===== COLOURBLIND MODE =====
+   Colourblind-friendly palette using Okabe-Ito colours */
+
+body.colourblind-mode .base.active {
+    background-color: #f0e442;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #1e293b;
+}
+
+body.colourblind-mode .codon.match {
+    background-color: #0072b2;
+    color: white;
+}
+
+body.colourblind-mode .codon.mismatch {
+    background-color: #e69f00;
+    color: #1e293b;
+}
+
+body.colourblind-mode .codon.stop-codon,
+body.colourblind-mode .codon.stop-codon.match,
+body.colourblind-mode .codon.stop-codon.mismatch {
+    background-color: #d55e00;
     color: white;
 }
 
@@ -673,8 +843,19 @@ midi-visualizer {
         gap: 16px;
     }
 
-    .sound-key {
-        min-width: auto;
+    .keys-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sound-key-content {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sound-instruments-section {
+        flex-direction: column;
+        gap: 16px;
     }
 }
 

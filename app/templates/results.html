@@ -43,6 +43,83 @@
                 <pre>          {{ alignment.match }}</pre>
                 <pre>Subject:  <span id="subjectBases">{{ alignment.subject|replace('-', '<span class="gap">-</span>')|safe }}</span></pre>
             </div>
+
+            <div class="keys-container">
+                <div class="colour-key">
+                    <div class="colour-key-header">
+                        <h4>Visualiser Colour Key</h4>
+                        <label class="colourblind-toggle-inline" for="colourblindMode">
+                            <input type="checkbox" id="colourblindMode">
+                            <span>Colourblind-friendly</span>
+                        </label>
+                    </div>
+                    <div class="colour-key-item">
+                        <span class="colour-swatch colour-match"></span>
+                        <span class="sound-label">Match in Amino Acid Produced</span>
+                    </div>
+                    <div class="colour-key-item">
+                        <span class="colour-swatch colour-mismatch"></span>
+                        <span class="sound-label">Mismatch in Amino Acid Produced</span>
+                    </div>
+                    <div class="colour-key-item">
+                        <span class="colour-swatch colour-stop"></span>
+                        <span class="sound-label">Stop Codon</span>
+                    </div>
+                    <div class="colour-key-item">
+                        <span class="colour-swatch colour-active"></span>
+                        <span class="sound-label">Current Nucleotide</span>
+                    </div>
+                    <div class="colour-key-item">
+                        <span class="colour-swatch colour-gap"></span>
+                        <span class="sound-label">Gap</span>
+                    </div>
+                </div>
+
+                <div class="sound-key">
+                    <h4>Sound Key</h4>
+                    <div class="sound-key-content">
+                        <div class="sound-symbols-section">
+                            <div class="sound-key-item">
+                                <img src="../static/images/cymbal.png" alt="Cymbal" class="sound-key-image">
+                                <span class="sound-label">Gap</span>
+                            </div>
+                            <div class="sound-key-item">
+                                <span class="sound-symbol">👏</span>
+                                <span class="sound-label">Stop Codon</span>
+                            </div>
+                            <div class="sound-key-item">
+                                <span class="sound-symbol">🎵</span>
+                                <span class="sound-label">Codon</span>
+                            </div>
+                            <div class="sound-key-item">
+                                <span class="sound-symbol">♪</span>
+                                <span class="sound-label">Nucleotide</span>
+                            </div>
+                        </div>
+                        <div class="sound-instruments-section">
+                            <div class="instruments-column">
+                                <h5>Query Sequence</h5>
+                                <div class="sound-key-item">
+                                    <span class="sound-label">🎹 Piano - Codons</span>
+                                </div>
+                                <div class="sound-key-item">
+                                    <img src="../static/images/vibraphone_cartoon.png" alt="Vibraphone" class="sound-key-image">
+                                    <span class="sound-label">Vibraphone - Nucleotides</span>
+                                </div>
+                            </div>
+                            <div class="instruments-column">
+                                <h5>Subject Sequence</h5>
+                                <div class="sound-key-item">
+                                    <span class="sound-label">🎻 Cello - Codons</span>
+                                </div>
+                                <div class="sound-key-item">
+                                    <span class="sound-label">🪈 Flute - Nucleotides</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="alignment-card">
@@ -76,42 +153,6 @@
                 <!-- Silently refresh the page 2 seconds after clicking the button - seems to help with a little bug i was having where the player wouldn't play without first refreshing the page -->
                 <button type="submit">Generate Sonification</button>
             </form>
-
-                <div class="sound-key">
-                    <h4>Sound Key</h4>
-                    <div class="sound-key-item">
-                        <span class="sound-symbol">💥</span>
-                        <span class="sound-label">Gap</span>
-                    </div>
-                    <div class="sound-key-item">
-                        <span class="sound-symbol">👏</span>
-                        <span class="sound-label">Stop Codon</span>
-                    </div>
-                    <div class="sound-key-item">
-                        <span class="sound-symbol">🎵</span>
-                        <span class="sound-label">Codon</span>
-                    </div>
-                    <div class="sound-key-item">
-                        <span class="sound-symbol">♪</span>
-                        <span class="sound-label">Nucleotide</span>
-                    </div>
-                    <hr class="sound-key-divider">
-                    <h4>Query Sequence</h4>
-                    <div class="sound-key-item">
-                        <span class="sound-label">🎹 Piano - Codons</span>
-                    </div>
-                    <div class="sound-key-item">
-                        <img src="../static/images/vibraphone_cartoon.png" alt="Vibraphone" class="sound-key-image">
-                        <span class="sound-label">Vibraphone - Nucleotides</span>
-                    </div>
-                    <h4>Subject Sequence</h4>
-                    <div class="sound-key-item">
-                        <span class="sound-label">🎻 Cello - Codons</span>
-                    </div>
-                    <div class="sound-key-item">
-                        <span class="sound-label">🪈 Flute - Nucleotides</span>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -125,7 +166,12 @@
             stopCodonGroup.style.display = (codonOrNuc === 'nucleotides') ? 'none' : 'block';
         }
 
+        function applyColourblindMode(enabled) {
+            document.body.classList.toggle('colourblind-mode', enabled);
+        }
+
         const form = document.querySelector('form');
+        const colourblindToggle = document.getElementById('colourblindMode');
 
         // Save selections when user changes the radio buttons
         form.addEventListener('change', () => {
@@ -134,6 +180,13 @@
             const readingFrame = document.querySelector('input[name="reading_frame"]:checked').value;
             localStorage.setItem('reading_frame', readingFrame);
             updateStopCodonVisibility();
+        });
+
+        // Handle colourblind mode toggle
+        colourblindToggle.addEventListener('change', () => {
+            const isEnabled = colourblindToggle.checked;
+            localStorage.setItem('colourblind_mode', isEnabled);
+            applyColourblindMode(isEnabled);
         });
 
         // // Update hidden input and reload page on form submit
@@ -152,6 +205,10 @@
             }
             if (localStorage.getItem('reading_frame')) {
                 document.querySelector(`input[name="reading_frame"][value="${localStorage.getItem('reading_frame')}"]`).checked = true;
+            }
+            if (localStorage.getItem('colourblind_mode') === 'true') {
+                colourblindToggle.checked = true;
+                applyColourblindMode(true);
             }
             updateStopCodonVisibility();
         });

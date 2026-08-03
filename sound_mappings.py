@@ -27,7 +27,7 @@ base_map = {"A": 69, "T": 63, "G": 67, "C": 60}
 # }
 
 # Codon to amino acid mapping, built out from the above 
-# # Edwards et al
+# # Edwards et al, 2021
 codons = {
     'TTT': {'name': 'Phenylalanine', 'symbol': 'F', 'midi': 50},
     'TTC': {'name': 'Phenylalanine', 'symbol': 'F', 'midi': 50},
